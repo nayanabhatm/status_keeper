@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:statuskeeper/models/viewModel.dart';
-import 'package:statuskeeper/functionalities/checkStoragePermission.dart';
-import 'package:statuskeeper/image_related/imagesGrid.dart';
-import 'package:statuskeeper/saved_related/savedTab.dart';
-import 'package:statuskeeper/videos_related/videosGrid.dart';
 import 'package:statuskeeper/buildAppBar.dart';
-
+import 'package:statuskeeper/models/status_store.dart';
+import 'package:statuskeeper/tabs/images_tab/images.dart';
+import 'package:statuskeeper/tabs/saved_tab/savedTab.dart';
+import 'package:statuskeeper/tabs/videos_tab/videos.dart';
+import 'package:statuskeeper/utils/checkStoragePermission.dart';
 
 class Tabs extends StatefulWidget {
   @override
   _TabsState createState() => _TabsState();
 }
 
-class _TabsState extends State<Tabs> with WidgetsBindingObserver, AutomaticKeepAliveClientMixin{
+class _TabsState extends State<Tabs>
+    with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -22,80 +22,72 @@ class _TabsState extends State<Tabs> with WidgetsBindingObserver, AutomaticKeepA
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var viewModelData=Provider.of<StatusViewModel>(context,listen: false);
+      var state = Provider.of<StatusStore>(context, listen: false);
       WidgetsBinding.instance.addObserver(this);
-      PermissionCheck().checkStoragePermission();
+      try {
+        PermissionCheck.checkStoragePermission();
 
-      var tabController = DefaultTabController.of(context);
-      tabController.addListener(() {
-        viewModelData.resetLongPress();
-        ['images','videos','savedImages','savedVideos'].forEach((element){
-            viewModelData.resetIsSelected(element);
+        var tabController = DefaultTabController.of(context);
+        tabController.addListener(() {
+          state.resetLongPress();
+          StatusType.values.forEach((element) {
+            state.resetIsSelected(element);
+          });
+          state.updateCurrentTab(tabController.index);
         });
-          viewModelData.updateCurrentTab(tabController.index);
-      });
 
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          viewModelData.resetAllValues();
-      });
-
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          state.resetAll();
+        });
+      } catch (e) {
+        print("No Permission");
+      }
     });
-
-
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print(state);
-    var viewModelData=Provider.of<StatusViewModel>(context,listen: false);
-    if(state==AppLifecycleState.resumed)
-    {
-      viewModelData.resetAllValues();
+  void didChangeAppLifecycleState(AppLifecycleState appLifecycleState) {
+    print(appLifecycleState);
+    var state = Provider.of<StatusStore>(context, listen: false);
+    if (appLifecycleState == AppLifecycleState.resumed) {
+      state.resetAll();
     }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    var state = Provider.of<StatusStore>(context, listen: false);
     return WillPopScope(
-      onWillPop: (){
-        var viewModelData=Provider.of<StatusViewModel>(context,listen: false);
-        if(viewModelData.isLongPress ) {
-            viewModelData.resetLongPress();
-            ['images','videos','savedImages','savedVideos'].forEach((element){
-              viewModelData.resetIsSelected(element);
-            });
-            return Future<bool>.value(false);
-         }
-        else{
+      onWillPop: () {
+        if (state.isLongPress) {
+          state.resetLongPress();
+          StatusType.values.forEach((element) {
+            state.resetIsSelected(element);
+          });
+          return Future<bool>.value(false);
+        } else {
           return Future<bool>.value(true);
         }
       },
-      child: Builder(
-        builder: (context){
+      child: Consumer<StatusStore>(
+        builder: (BuildContext _, StatusStore state, Widget __) {
           return Scaffold(
-            appBar: AppBarBuild().buildAppBar(context),
-            body: TabBarView(
-                children: [
-                  ImagesGrid(),
-                  VideosGrid(),
-                  SavedTab(),
-                ]),
+            appBar: StatusAppBar().buildAppBar(context),
+            body: TabBarView(children: [
+              Images(),
+              Videos(),
+              Saved(),
+            ]),
           );
         },
       ),
     );
   }
-
-
-
 }

@@ -1,18 +1,18 @@
-class ImageFile{
+class StatusImage {
   final String imagePath;
   bool isSelected;
 
-  ImageFile({this.imagePath,this.isSelected=false});
+  StatusImage({this.imagePath, this.isSelected = false});
 
-  void toggleIsSelected(){
-    isSelected=!isSelected;
+  void toggleIsSelected() {
+    isSelected = !isSelected;
   }
 
-  void makeIsSelectedFalse(){
-    isSelected=false;
+  void resetIsSelected() {
+    isSelected = false;
   }
 
-  void makeIsSelectedTrue(){
-    isSelected=true;
+  void setIsSelected() {
+    isSelected = true;
   }
 }

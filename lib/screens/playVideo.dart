@@ -1,16 +1,17 @@
+import 'dart:io';
+
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:statuskeeper/models/status_store.dart';
+import 'package:statuskeeper/utils/shareFile.dart';
+import 'package:statuskeeper/widget_styles.dart';
 import 'package:video_player/video_player.dart';
-import 'dart:io';
-import 'package:statuskeeper/constants.dart';
-import 'package:statuskeeper/functionalities/shareFile.dart';
-import 'package:chewie/chewie.dart';
-import 'package:statuskeeper/models/viewModel.dart';
 
 class VideoPlayScreen extends StatefulWidget {
   final int index;
   final String videoFileName;
-  VideoPlayScreen({this.index,this.videoFileName});
+  VideoPlayScreen({this.index, this.videoFileName});
 
   @override
   _VideoPlayScreenState createState() => _VideoPlayScreenState();
@@ -24,16 +25,16 @@ class _VideoPlayScreenState extends State<VideoPlayScreen> {
   @override
   void initState() {
     super.initState();
-    _videoPlayerController= VideoPlayerController.file(File(widget.videoFileName));
-    _future=initVideoPlayer();
-    setState(() {
-    });
+    _videoPlayerController =
+        VideoPlayerController.file(File(widget.videoFileName));
+    _future = initVideoPlayer();
+    setState(() {});
   }
 
   Future<void> initVideoPlayer() async {
-     await _videoPlayerController.initialize();
-     _chewieController = ChewieController(
-      aspectRatio:_videoPlayerController.value.aspectRatio,
+    await _videoPlayerController.initialize();
+    _chewieController = ChewieController(
+      aspectRatio: _videoPlayerController.value.aspectRatio,
       videoPlayerController: _videoPlayerController,
       autoPlay: true,
       looping: true,
@@ -50,32 +51,31 @@ class _VideoPlayScreenState extends State<VideoPlayScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    var viewModelData=Provider.of<StatusViewModel>(context);
+    var state = Provider.of<StatusStore>(context);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text("Videos"),
         backgroundColor: Colors.black,
         actions: <Widget>[
-          (viewModelData.getCurrentTab==0 || viewModelData.getCurrentTab==1) ? Builder(
-            builder: (context)=>
-                IconButton(
-                  tooltip: "Save",
-                  icon: Icon(Icons.save),
-                  onPressed: (){
-                     try{
-                       viewModelData.saveSingleFile(widget.videoFileName,'videos');
-                       Scaffold.of(context).showSnackBar(kSnackBarForSaved);
-                     }
-                     catch(e){
-                       print(e);
-                     }
-                  },
-              ),
-          ):Container(),
+          (state.getCurrentTab == 0 || state.getCurrentTab == 1)
+              ? Builder(
+                  builder: (context) => IconButton(
+                    tooltip: "Save",
+                    icon: Icon(Icons.save),
+                    onPressed: () {
+                      try {
+                        state.save(widget.videoFileName, StatusType.video);
+                        Scaffold.of(context).showSnackBar(kSnackBarForSaved);
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                  ),
+                )
+              : Container(),
 //          Builder(
 //            builder: (context)=>
 //                IconButton(
@@ -90,27 +90,28 @@ class _VideoPlayScreenState extends State<VideoPlayScreen> {
           IconButton(
             tooltip: "Share",
             icon: Icon(Icons.share),
-            onPressed: (){
-              ShareImageVideo.shareImageVideo(widget.videoFileName,'file');
+            onPressed: () {
+              Share.share(widget.videoFileName, 'file');
             },
           ),
-          SizedBox(width: 15.0,)
+          SizedBox(
+            width: 15.0,
+          )
         ],
       ),
       body: FutureBuilder(
         future: _future,
-        builder: (context,snapshot){
-          if(snapshot.connectionState == ConnectionState.waiting)
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting)
             return Container();
           return Center(
             child: Container(
                 child: AspectRatio(
-                  aspectRatio:_videoPlayerController.value.aspectRatio,
-                  child: Chewie(
-                    controller: _chewieController,
-                  ),
-                )
-            ),
+              aspectRatio: _videoPlayerController.value.aspectRatio,
+              child: Chewie(
+                controller: _chewieController,
+              ),
+            )),
           );
         },
       ),
@@ -123,6 +124,4 @@ class _VideoPlayScreenState extends State<VideoPlayScreen> {
     _chewieController.dispose();
     super.dispose();
   }
-
-
 }

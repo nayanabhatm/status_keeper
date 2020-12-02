@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-TextStyle kButtonStyle= TextStyle(color: Colors.white, fontSize: 20,fontWeight: FontWeight.bold);
 
 final kSnackBarForSaved = SnackBar(
   content: Text('Yay! Status Saved!'),
@@ -14,5 +13,3 @@ final kSnackBarForDelete = SnackBar(
   duration: Duration(seconds: 1),
   elevation: 6.0,
 );
-
-

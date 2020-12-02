@@ -1,31 +1,34 @@
 import 'dart:typed_data';
+
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-class VideoFile{
+class StatusVideo {
   final String videoPath;
   bool isSelected;
   Future<Uint8List> bytes;
 
-  VideoFile({this.videoPath,this.isSelected=false,});
+  StatusVideo({
+    this.videoPath,
+    this.isSelected = false,
+  });
 
-  void toggleIsSelected(){
-    isSelected=!isSelected;
+  void toggleIsSelected() {
+    isSelected = !isSelected;
   }
 
-  void makeIsSelectedFalse(){
-    isSelected=false;
+  void resetIsSelected() {
+    isSelected = false;
   }
 
-  void makeIsSelectedTrue(){
-    isSelected=true;
+  void setIsSelected() {
+    isSelected = true;
   }
 
   void getVideoThumbnailBytes() {
-    bytes= VideoThumbnail.thumbnailData(
+    bytes = VideoThumbnail.thumbnailData(
       video: videoPath,
       imageFormat: ImageFormat.PNG,
       quality: 25,
-    ) ;
+    );
   }
-
 }

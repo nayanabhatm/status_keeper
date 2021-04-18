@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:statuskeeper/models/status_store.dart';
+import 'package:statuskeeper/utils/constants.dart';
 import 'package:statuskeeper/widget_styles.dart';
 
 class StatusAppBar {

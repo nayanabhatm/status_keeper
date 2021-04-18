@@ -20,7 +20,9 @@ class ImageCard extends StatelessWidget {
             imageFile.isSelected
                 ? ColorFiltered(
                     colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                      Colors.black.withOpacity(0.2),
+                      BlendMode.dstATop,
+                    ),
                     child: Image.file(
                       File(imageFile.imagePath),
                       fit: BoxFit.cover,
@@ -30,18 +32,17 @@ class ImageCard extends StatelessWidget {
                     File(imageFile.imagePath),
                     fit: BoxFit.cover,
                   ),
-            state.isLongPress
-                ? Align(
-                    alignment: Alignment.bottomRight,
-                    child: Icon(
-                      imageFile.isSelected
-                          ? Icons.check_box
-                          : Icons.check_box_outline_blank,
-                      size: 30.0,
-                      color: Colors.lightGreen,
-                    ),
-                  )
-                : Container()
+            if (state.isLongPress)
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Icon(
+                  imageFile.isSelected
+                      ? Icons.check_box
+                      : Icons.check_box_outline_blank,
+                  size: 30.0,
+                  color: Colors.lightGreen,
+                ),
+              ),
           ],
         ),
         elevation: 20.0,

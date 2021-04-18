@@ -3,23 +3,12 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:statuskeeper/models/image.dart';
 import 'package:statuskeeper/models/video.dart';
+import 'package:statuskeeper/utils/constants.dart';
 import 'package:statuskeeper/utils/saveFile.dart';
 import 'package:statuskeeper/utils/shareFile.dart';
 import 'package:statuskeeper/utils/sortFiles.dart';
 
-enum StatusType {
-  image,
-  video,
-  savedImage,
-  savedVideo,
-}
-
 class StatusStore extends ChangeNotifier {
-  final Directory statusDirectory =
-      Directory('/storage/emulated/0/WhatsApp/Media/.Statuses');
-  final Directory savedDirectory =
-      Directory('/storage/emulated/0/Status Keeper');
-
   bool _isSwitched = true;
   bool _isLongPress = false;
   bool _isSelectAll = false;
@@ -284,7 +273,7 @@ class StatusStore extends ChangeNotifier {
     List<FileSystemEntity> filesFromDir = [];
     List<String> filePathList = [];
     if (type == StatusType.image) {
-      filesFromDir = await statusDirectory
+      filesFromDir = await Constants.statusDirectory
           .list()
           .where((event) => (!event.path.contains('.nomedia') &&
               !event.path.contains('.mp4')))
@@ -296,7 +285,7 @@ class StatusStore extends ChangeNotifier {
         _images.add(StatusImage(imagePath: element));
       });
     } else if (type == StatusType.video) {
-      filesFromDir = await statusDirectory
+      filesFromDir = await Constants.statusDirectory
           .list()
           .where((event) => (!event.path.contains('.nomedia') &&
               !event.path.contains('.jpg')))
@@ -312,7 +301,7 @@ class StatusStore extends ChangeNotifier {
         element.getVideoThumbnailBytes();
       });
     } else if (type == StatusType.savedImage) {
-      filesFromDir = await savedDirectory
+      filesFromDir = await Constants.savedDirectory
           .list()
           .where((event) => (!event.path.contains('.nomedia') &&
               !event.path.contains('.mp4')))
@@ -324,7 +313,7 @@ class StatusStore extends ChangeNotifier {
         _imagesSaved.add(StatusImage(imagePath: element));
       });
     } else if (type == StatusType.savedVideo) {
-      filesFromDir = await savedDirectory
+      filesFromDir = await Constants.savedDirectory
           .list()
           .where((event) => (!event.path.contains('.nomedia') &&
               !event.path.contains('.jpg')))

@@ -4,6 +4,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:statuskeeper/models/status_store.dart';
+import 'package:statuskeeper/utils/constants.dart';
 import 'package:statuskeeper/utils/shareFile.dart';
 import 'package:statuskeeper/widget_styles.dart';
 import 'package:video_player/video_player.dart';
@@ -34,6 +35,7 @@ class _VideoPlayScreenState extends State<VideoPlayScreen> {
   Future<void> initVideoPlayer() async {
     await _videoPlayerController.initialize();
     _chewieController = ChewieController(
+      allowPlaybackSpeedChanging: false,
       aspectRatio: _videoPlayerController.value.aspectRatio,
       videoPlayerController: _videoPlayerController,
       autoPlay: true,

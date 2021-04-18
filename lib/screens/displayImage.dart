@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:statuskeeper/models/status_store.dart';
+import 'package:statuskeeper/utils/constants.dart';
 import 'package:statuskeeper/utils/shareFile.dart';
 import 'package:statuskeeper/widget_styles.dart';
 
@@ -19,7 +20,7 @@ class DisplayImage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text("Images"),
+        title: Text(Constants.images),
         backgroundColor: Colors.black,
         actions: <Widget>[
           (state.getCurrentTab == 0 || state.getCurrentTab == 1)

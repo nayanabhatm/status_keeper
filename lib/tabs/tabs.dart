@@ -6,6 +6,7 @@ import 'package:statuskeeper/tabs/images_tab/images.dart';
 import 'package:statuskeeper/tabs/saved_tab/savedTab.dart';
 import 'package:statuskeeper/tabs/videos_tab/videos.dart';
 import 'package:statuskeeper/utils/checkStoragePermission.dart';
+import 'package:statuskeeper/utils/constants.dart';
 
 class Tabs extends StatefulWidget {
   @override

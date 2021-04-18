@@ -1,6 +1,6 @@
 # statuskeeper
 
-A new Flutter application.
+An app to save and share Whatsapp Status Images and Videos. 
 
 ## Getting Started
 

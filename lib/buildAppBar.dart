@@ -13,11 +13,16 @@ class StatusAppBar {
 
     if (state.isLongPress) {
       return AppBar(
+        backgroundColor: Colors.lightGreen,
+        foregroundColor: Colors.lightGreen,
         actions: <Widget>[
           IconButton(
             tooltip: "Select All",
             iconSize: 32.0,
-            icon: Icon(Icons.select_all),
+            icon: Icon(
+              Icons.select_all,
+              color: Colors.white,
+            ),
             onPressed: () {
               if (currentTab == 0)
                 state.selectAll(StatusType.image);
@@ -39,7 +44,10 @@ class StatusAppBar {
                   return IconButton(
                     tooltip: "Save",
                     iconSize: 30.0,
-                    icon: Icon(Icons.save),
+                    icon: Icon(
+                      Icons.save,
+                      color: Colors.white,
+                    ),
                     onPressed: () {
                       if (currentTab == 0) {
                         state.saveMultiple(StatusType.image);
@@ -51,68 +59,16 @@ class StatusAppBar {
                     },
                   );
                 })
-              :
-//                Builder(
-//                  builder: (context){
-//                    return IconButton(
-//                      tooltip: "Delete",
-//                      iconSize: 30.0,
-//                      icon: Icon(Icons.delete),
-//                      onPressed: () {
-//
-//                        Alert(
-//                            style: AlertStyle(
-//                              isCloseButton: false,
-//                              backgroundColor: Colors.black,
-//                              titleStyle: TextStyle(
-//                                color: Colors.white,
-//                                fontSize: 16.0,
-//                              )
-//                            ),
-//                            context: context,
-//                            title: "Do You Want to Delete the File?",
-//                            buttons: [
-//                                DialogButton(
-//                                    child: Text("Yes",style: TextStyle(color: Colors.white, fontSize: 20),),
-//                                    color: Colors.lightGreen,
-//                                    onPressed: () {
-//                                      if (viewModel.savedTabToggleButtonImage) {
-//                                        viewModel.deleteMultipleFiles(
-//                                            'savedImages');
-//                                        Scaffold.of(context).showSnackBar(
-//                                            kSnackBarForDelete);
-//                                      }
-//                                      else
-//                                      if (viewModel.savedTabToggleButtonVideo) {
-//                                        viewModel.deleteMultipleFiles(
-//                                            'savedVideos');
-//                                        Scaffold.of(context).showSnackBar(
-//                                            kSnackBarForDelete);
-//                                      }
-//                                      Navigator.pop(context);
-//                                    },
-//                                ),
-//                                DialogButton(
-//                                      child: Text("No",style: TextStyle(color: Colors.white, fontSize: 20),),
-//                                      color: Colors.lightGreen,
-//                                      onPressed: (){
-//                                        Navigator.pop(context);
-//                                      },
-//                                )
-//
-//                            ]
-//                        ).show();
-//                      },
-//                    );
-//                  },
-//                ),
-              SizedBox(
+              : SizedBox(
                   width: 5.0,
                 ),
           IconButton(
             tooltip: "Share",
             iconSize: 30.0,
-            icon: Icon(Icons.share),
+            icon: Icon(
+              Icons.share,
+              color: Colors.white,
+            ),
             onPressed: () {
               if (currentTab == 0)
                 state.shareMultiple(StatusType.image);
@@ -140,7 +96,14 @@ class StatusAppBar {
       );
     } else {
       return AppBar(
-        title: Text("Status Keeper"),
+        foregroundColor: Colors.lightGreen,
+        backgroundColor: Colors.lightGreen,
+        title: Text(
+          "Status Keeper",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         bottom: TabBar(
           tabs: [
             Tab(text: "Images"),
